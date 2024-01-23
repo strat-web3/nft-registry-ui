@@ -5,7 +5,7 @@ import { LinkComponent } from 'components/layout/LinkComponent'
 import { useState, useEffect } from 'react'
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 import { ethers } from 'ethers'
-import { ERC20_CONTRACT_ADDRESS, ERC20_CONTRACT_ABI } from '../utils/erc20'
+import { REGISTRY_CONTRACT_ADDRESS, REGISTRY_CONTRACT_ABI } from '../utils/registry'
 import { useEthersSigner, useEthersProvider } from '../hooks/ethersAdapter'
 
 export default function Home() {
@@ -19,6 +19,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [txLink, setTxLink] = useState<string>()
   const [txHash, setTxHash] = useState<string>()
+  const [assets, setAssets] = useState<string>()
 
   useEffect(() => {
     const init = async () => {
@@ -27,10 +28,10 @@ export default function Home() {
       }
     }
     init()
-    console.log('Contract address:', ERC20_CONTRACT_ADDRESS)
+    console.log('Contract address:', REGISTRY_CONTRACT_ADDRESS)
   }, [signer])
 
-  const mint = async () => {
+  const check = async () => {
     try {
       if (!signer) {
         toast({
@@ -47,16 +48,13 @@ export default function Home() {
       setIsLoading(true)
       setTxHash('')
       setTxLink('')
-      const erc20 = new ethers.Contract(ERC20_CONTRACT_ADDRESS, ERC20_CONTRACT_ABI, signer)
-      const call = await erc20.mint(ethers.parseEther('10000'))
-      const receipt = await call.wait()
-      console.log('tx:', receipt)
-      setTxHash(receipt.hash)
-      setTxLink('https://sepolia.etherscan.io/tx/' + receipt.hash)
+      const registry = new ethers.Contract(REGISTRY_CONTRACT_ADDRESS, REGISTRY_CONTRACT_ABI, signer)
+      const call = await registry.assets(1)
+      setAssets(String(call))
       setIsLoading(false)
       toast({
-        title: 'Successful mint',
-        description: 'Congrats, 10,000 BASIC tokens were minted and sent to your wallet! 🎉',
+        title: 'Success',
+        description: 'Thank you for using the NFT Registry!',
         status: 'success',
         position: 'bottom',
         variant: 'subtle',
@@ -68,7 +66,7 @@ export default function Home() {
       console.log('error:', e)
       toast({
         title: 'Woops',
-        description: 'Something went wrong during the minting process...',
+        description: 'Something went wrong during the check process...',
         status: 'error',
         position: 'bottom',
         variant: 'subtle',
@@ -83,18 +81,24 @@ export default function Home() {
       <Head />
 
       <main>
-        <HeadingComponent as="h2">Hi there! 👋</HeadingComponent>
+        <HeadingComponent as="h2">NFT Registry</HeadingComponent>
+        {
+          <Text py={4} fontSize="14px" color="#45a2f8">
+            {assets ? assets : '?'}
+          </Text>
+        }
         <Button
           mt={7}
           colorScheme="blue"
           variant="outline"
           type="submit"
-          onClick={mint}
+          onClick={check}
           isLoading={isLoading}
-          loadingText="Minting..."
+          loadingText="Searching..."
           spinnerPlacement="end">
-          Mint
+          Check
         </Button>
+
         {txHash && (
           <Text py={4} fontSize="14px" color="#45a2f8">
             <LinkComponent href={txLink ? txLink : ''}>{txHash}</LinkComponent>
