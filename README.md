@@ -1,26 +1,8 @@
-# W3HC Next.js Boilerplate
+# NFT Registry UI
 
-A variant of [Nexth](https://github.com/wslyvh/nexth/) boilerplate for hackathons and quick prototyping.
+A UI for the NFT Registy.
 
-- [live demo](https://w3hc-nextjs-boilerplate.netlify.app)
-- [Solidity Contracts](https://github.com/w3hc/w3hc-hardhat-template)
-
-## Features
-
-- [Next.js](https://nextjs.org/docs)
-- [Chakra UI](https://chakra-ui.com/)
-- [Ethers v6](https://docs.ethers.org/v6/)
-- [viem](https://viem.sh/)
-- [wagmi](https://wagmi.sh/)
-- [Web3Modal SDK from WalletConnect](https://docs.walletconnect.com/)
-- [Sign-In with Ethereum](https://www.login.xyz/)
-- [Gitcoin Passport](https://docs.passport.gitcoin.co/)
-- [usehooks-ts](https://usehooks-ts.com/)
-- [next-SEO](https://github.com/garmeeh/next-seo)
-- [TypeScript](https://www.typescriptlang.org/)
-- [eslint](https://eslint.org/)
-- [prettier](https://prettier.io/)
-- [Husky](https://typicode.github.io/husky/)
+- Contract: [https://github.com/strat-web3/nft-registry-contracts/](https://github.com/strat-web3/nft-registry-contracts/)
 
 ## Install
 
@@ -47,10 +29,6 @@ pnpm dev
 ```bash
 pnpm build
 ```
-
-## Gitcoin passport
-
-If you want to use Gitcoin Passport, uncomment line 26 in the `components/layout/Header.tsx` file.
 
 ## Support
 
