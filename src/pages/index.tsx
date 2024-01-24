@@ -19,7 +19,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [txLink, setTxLink] = useState<string>()
   const [txHash, setTxHash] = useState<string>()
-  const [assets, setAssets] = useState<string>()
+  const [assets, setAssets] = useState<any>()
   const [selectedID, setSelectedID] = useState('23')
 
   useEffect(() => {
@@ -49,7 +49,7 @@ export default function Home() {
       setIsLoading(true)
       setTxHash('')
       setTxLink('')
-      const registry = new ethers.Contract(REGISTRY_CONTRACT_ADDRESS, REGISTRY_CONTRACT_ABI, signer)
+      const registry = new ethers.Contract(REGISTRY_CONTRACT_ADDRESS, REGISTRY_CONTRACT_ABI, provider)
       const call = await registry.assets(selectedID)
       setAssets(call)
       setIsLoading(false)
@@ -63,21 +63,21 @@ export default function Home() {
         isClosable: true,
       })
     } catch (e) {
-      setAssets({
-        0: 0,
-        1: '0x0000000000000000000000000000000000000000',
-        2: 0,
-        3: '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
-        4: 'ipfs://00000000000000000000000000000000000000000000000000000000000/metadata.json',
-        5: 0,
-        6: false,
-        7: false,
-        8: 0,
-        9: '0x0000000000000000000000000000000000000000',
-        10: '0x0000000000000000000000000000000000000000',
-        11: '0x0000000000000000000000000000000000000000',
-        12: 'No info',
-      })
+      setAssets([
+        0,
+        '0x0000000000000000000000000000000000000000',
+        0,
+        '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+        'ipfs://00000000000000000000000000000000000000000000000000000000000/metadata.json',
+        0,
+        false,
+        false,
+        0,
+        '0x0000000000000000000000000000000000000000',
+        '0x0000000000000000000000000000000000000000',
+        '0x0000000000000000000000000000000000000000',
+        'No info',
+      ])
       setIsLoading(false)
       console.log('error:', e)
       toast({
