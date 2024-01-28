@@ -1,114 +1,63 @@
-import { Text, Button, useToast, FormControl, FormLabel, Input, FormHelperText } from '@chakra-ui/react'
+import { Text } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
 import { HeadingComponent } from 'components/layout/HeadingComponent'
 import { LinkComponent } from 'components/layout/LinkComponent'
 import { useState, useEffect } from 'react'
-import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi'
 import { ethers } from 'ethers'
-import { REGISTRY_CONTRACT_ADDRESS, REGISTRY_CONTRACT_ABI } from '../utils/registry'
-import { useEthersSigner, useEthersProvider } from '../hooks/ethersAdapter'
+import { REGISTRY_CONTRACT_ADDRESS, REGISTRY_CONTRACT_ABI } from '../../utils/registry'
+import { useEthersProvider } from '../../hooks/ethersAdapter'
 import { useRouter } from 'next/router'
 
-export default function Home() {
-  const { chains, error, pendingChainId, switchNetwork } = useSwitchNetwork()
-  const { isConnected } = useAccount()
-  const { chain } = useNetwork()
+export default function Id() {
   const provider = useEthersProvider()
-  const signer = useEthersSigner()
-  const toast = useToast()
   const router = useRouter()
 
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const id = router.query.id
+
+  // const [isLoading, setIsLoading] = useState<boolean>(false)
   const [txLink, setTxLink] = useState<string>()
   const [txHash, setTxHash] = useState<string>()
   const [assets, setAssets] = useState<any>()
-  const [selectedID, setSelectedID] = useState('23')
 
-  const defaultURL = './' + selectedID
+  const defaultURL = './' + id
 
   useEffect(() => {
     const init = async () => {
-      if (chain?.id !== 11155111) {
-        switchNetwork?.(11155111)
+      try {
+        console.log('id:', id)
+        const registry = new ethers.Contract(REGISTRY_CONTRACT_ADDRESS, REGISTRY_CONTRACT_ABI, provider)
+        const call = await registry.assets(id)
+        console.log('call:', call)
+        setAssets(call)
+      } catch (e) {
+        setAssets([
+          0,
+          '0x0000000000000000000000000000000000000000',
+          0,
+          '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
+          'ipfs://00000000000000000000000000000000000000000000000000000000000/metadata.json',
+          0,
+          false,
+          false,
+          0,
+          '0x0000000000000000000000000000000000000000',
+          '0x0000000000000000000000000000000000000000',
+          '0x0000000000000000000000000000000000000000',
+          'No info',
+        ])
       }
     }
     init()
-    console.log('Contract address:', REGISTRY_CONTRACT_ADDRESS)
-  }, [provider])
 
-  const check = async () => {
-    try {
-      setIsLoading(true)
-      setTxHash('')
-      setTxLink('')
-      const registry = new ethers.Contract(REGISTRY_CONTRACT_ADDRESS, REGISTRY_CONTRACT_ABI, provider)
-      const call = await registry.assets(selectedID)
-      setAssets(call)
-      setIsLoading(false)
-      toast({
-        title: 'Success',
-        description: 'Thank you for using the NFT Registry!',
-        status: 'success',
-        position: 'bottom',
-        variant: 'subtle',
-        duration: 20000,
-        isClosable: true,
-      })
-    } catch (e) {
-      setAssets([
-        0,
-        '0x0000000000000000000000000000000000000000',
-        0,
-        '000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000',
-        'ipfs://00000000000000000000000000000000000000000000000000000000000/metadata.json',
-        0,
-        false,
-        false,
-        0,
-        '0x0000000000000000000000000000000000000000',
-        '0x0000000000000000000000000000000000000000',
-        '0x0000000000000000000000000000000000000000',
-        'No info',
-      ])
-      setIsLoading(false)
-      console.log('error:', e)
-      toast({
-        title: 'Woops',
-        description: 'This ID is not in the Registry',
-        status: 'error',
-        position: 'bottom',
-        variant: 'subtle',
-        duration: 9000,
-        isClosable: true,
-      })
-    }
-  }
+    console.log('Contract address:', REGISTRY_CONTRACT_ADDRESS)
+  }, [id])
 
   return (
     <>
       <Head />
 
       <main>
-        <HeadingComponent as="h4">Registered NFT search engine</HeadingComponent>
-        <FormControl pt={10}>
-          <FormLabel>Entry ID</FormLabel>
-          <Input value={selectedID} onChange={(e) => setSelectedID(e.target.value)} placeholder="1" />
-          <FormHelperText>Select the ID of the entry your searching for.</FormHelperText>
-          <br />
-        </FormControl>
-
-        <Button
-          mt={2}
-          mb={10}
-          colorScheme="blue"
-          variant="outline"
-          type="submit"
-          onClick={check}
-          isLoading={isLoading}
-          loadingText="Searching..."
-          spinnerPlacement="end">
-          Search
-        </Button>
+        <HeadingComponent as="h4">ID #{id}</HeadingComponent>
 
         {assets ? (
           <>
