@@ -63,7 +63,7 @@ export function Header(props: Props) {
             <LinkComponent href="/register">
               <MenuItem onClick={switchToRegister}>Enregistrer un NFT</MenuItem>
             </LinkComponent>
-            <LinkComponent href="/delegate">
+            <LinkComponent href="/update">
               <MenuItem onClick={switchToUpdate}>Actualiser le statut d&apos;un NFT</MenuItem>
             </LinkComponent>
           </MenuList>
