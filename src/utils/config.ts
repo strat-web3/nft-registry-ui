@@ -11,7 +11,7 @@ export const THEME_CONFIG = {
   initialColorMode: THEME_INITIAL_COLOR,
 }
 
-export const SOCIAL_TWITTER = 'Strat0x1'
+export const SOCIAL_TWITTER = 'julienbrg'
 export const SOCIAL_GITHUB = 'strat-web3/nft-registry-ui'
 
 export const ETH_CHAINS = [sepolia]

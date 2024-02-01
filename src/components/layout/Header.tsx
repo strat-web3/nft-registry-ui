@@ -24,7 +24,7 @@ export function Header(props: Props) {
 
       <Flex alignItems="center" gap={4}>
         {/* <PassportScore /> */}
-        <w3m-button />
+        {/* <w3m-button /> */}
         <ThemeSwitcher />
       </Flex>
     </Flex>

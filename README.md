@@ -2,6 +2,7 @@
 
 A UI for the NFT Registy.
 
+- Live app: https://nft-registry.netlify.app/
 - Contract: [https://github.com/strat-web3/nft-registry-contracts/](https://github.com/strat-web3/nft-registry-contracts/)
 
 ## Install
