@@ -1,4 +1,4 @@
-import { Text, Button, useToast, FormControl, FormLabel, Input, FormHelperText } from '@chakra-ui/react'
+import { Text, Button, useToast, FormControl, FormLabel, Input, FormHelperText, Badge } from '@chakra-ui/react'
 import { Head } from 'components/layout/Head'
 import { HeadingComponent } from 'components/layout/HeadingComponent'
 import { LinkComponent } from 'components/layout/LinkComponent'
@@ -8,6 +8,7 @@ import { ethers } from 'ethers'
 import { REGISTRY_CONTRACT_ADDRESS, REGISTRY_CONTRACT_ABI } from '../utils/registry'
 import { useEthersSigner, useEthersProvider } from '../hooks/ethersAdapter'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 
 export default function Home() {
   const { chains, error, pendingChainId, switchNetwork } = useSwitchNetwork()
@@ -23,6 +24,26 @@ export default function Home() {
   const [txHash, setTxHash] = useState<string>()
   const [assets, setAssets] = useState<any>()
   const [selectedID, setSelectedID] = useState('23')
+  const [madeRequest, setMadeRequest] = useState(false)
+  const [result, setResult] = useState<
+    {
+      id: string
+      network: number
+      contractAddress: string
+      tokenId: number
+      sourceFileHash: string
+      resaleRights: number
+      creatorName: string
+      creatorAddress: string
+      status: number
+      assetType: number
+      redeemable: boolean
+      tangible: boolean
+      info: string
+      metadata: string
+    }[]
+  >([])
+  const [selectedString, setSelectedString] = useState('Vinci')
 
   const defaultURL = './' + selectedID
 
@@ -84,16 +105,55 @@ export default function Home() {
     }
   }
 
+  const search = async () => {
+    setIsLoading(true)
+    try {
+      const response = await fetch(`http://localhost:3000/nft/${selectedString}`)
+      if (!response.ok) {
+        throw new Error('Network response was not ok')
+      }
+      const data = await response.json()
+      console.log('data:', data)
+      setResult(data)
+      setIsLoading(false)
+      setMadeRequest(true)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      setIsLoading(false)
+    }
+  }
+
+  function Item(props: any) {
+    return (
+      <>
+        <div className="">
+          <div>
+            <strong>
+              <LinkComponent href={'https://sepolia.etherscan.io/'}>{props.contractAddress}</LinkComponent>
+            </strong>{' '}
+          </div>
+        </div>
+      </>
+    )
+  }
+
+  function List() {
+    return (
+      <div>{result ? result.map((p) => <Item key={p.id} network={p.network} contractAddress={p.contractAddress} tokenId={p.tokenId} />) : ''}</div>
+    )
+  }
+
   return (
     <>
       <Head />
 
       <main>
         <HeadingComponent as="h4">Registered NFT search engine</HeadingComponent>
-        <FormControl pt={10}>
-          <FormLabel>Entry ID</FormLabel>
-          <Input value={selectedID} onChange={(e) => setSelectedID(e.target.value)} placeholder="1" />
-          <FormHelperText>Select the ID of the entry your searching for.</FormHelperText>
+
+        <FormControl pt={5}>
+          <FormLabel>Search by name, contract address or artwork source file hash</FormLabel>
+          <Input value={selectedString} onChange={(e) => setSelectedString(e.target.value)} placeholder="One" />
+          <FormHelperText>Search for key words.</FormHelperText>
           <br />
         </FormControl>
 
@@ -103,62 +163,20 @@ export default function Home() {
           colorScheme="blue"
           variant="outline"
           type="submit"
-          onClick={check}
+          onClick={search}
           isLoading={isLoading}
           loadingText="Searching..."
           spinnerPlacement="end">
           Search
         </Button>
-
-        {assets ? (
+        <br />
+        {madeRequest ? (
           <>
-            <Text fontSize="14px" color="#FFFFFF">
-              Network: <LinkComponent href={defaultURL}>{Number(assets[0])}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              Contract address: <LinkComponent href={defaultURL}>{String(assets?.[1])}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              TokenId: <LinkComponent href={defaultURL}>{Number(assets[2])}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              Media file hash: <LinkComponent href={defaultURL}>{assets[3]}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              Metadata URI: <LinkComponent href={defaultURL}>{assets[4]}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              Asset type: <LinkComponent href={defaultURL}>{Number(assets[5])}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              Tangible: <LinkComponent href={defaultURL}>{Boolean(assets[6]) === true ? 'true' : 'false'}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              Redeemable: <LinkComponent href={defaultURL}>{Boolean(assets[7]) === true ? 'true' : 'false'}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              Status: <LinkComponent href={defaultURL}>{Number(assets[8])}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              Creator address: <LinkComponent href={defaultURL}>{String(assets[9])}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              Registrar address: <LinkComponent href={defaultURL}>{String(assets[10])}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              Owner address: <LinkComponent href={defaultURL}>{String(assets[11])}</LinkComponent>
-            </Text>
-            <Text fontSize="14px" color="#FFFFFF">
-              Info: <LinkComponent href={defaultURL}>{String(assets[12])}</LinkComponent>
-            </Text>
+            <HeadingComponent as="h4">Results</HeadingComponent>
+            <List />
           </>
         ) : (
           ''
-        )}
-        {txHash && (
-          <Text py={4} fontSize="14px" color="#45a2f8">
-            <LinkComponent href={txLink ? txLink : ''}>{txHash}</LinkComponent>
-          </Text>
         )}
       </main>
     </>
