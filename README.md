@@ -5,6 +5,20 @@ A UI for the NFT Registy.
 - Live app: https://nft-registry.netlify.app/
 - Contract: [https://github.com/strat-web3/nft-registry-contracts/](https://github.com/strat-web3/nft-registry-contracts/)
 
+## API URLs
+
+Prod:
+
+```
+http://poc-nft-pg.public.rd.nic.fr:8080
+```
+
+Test:
+
+```
+http://localhost:3000
+```
+
 ## Install
 
 ```bash
