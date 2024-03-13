@@ -41,7 +41,7 @@ export default function Register() {
   const [recipient, setRecipient] = useState<string>('0xd63ed6E274bedb34D9666B8f62ed32a73C43DD9e')
   const [nftContractAddress, setNftContractAddress] = useState<string>('0x2201800b6166EB1EEa2382D02D51fa3364Be41f3')
   const [description, setDescription] = useState('This is a description.')
-  const [creatorAddress, setCreatorAddress] = useState<string>('0xd63ed6E274bedb34D9666B8f62ed32a73C43DD9e')
+  const [creatorAddress, setCreatorAddress] = useState<string>('0x6b28fd7ca109489c5f866c026a26b72052756644')
   const [creatorName, setCreatorName] = useState<string>('Julien')
   const [imageUrl, setImageUrl] = useState<string>(
     'https://bafybeigpo5rtggp5nnzw4bcojdcaj6bvqgoe3zm42azlwnfvn5qyvwmpna.ipfs.w3s.link/Screenshot%202024-01-29%20at%2019.36.24.png'
@@ -89,7 +89,7 @@ export default function Register() {
     console.log('start request')
     setIsLoading(true)
 
-    const url = 'http://poc-nft-pg.public.rd.nic.fr:8080/nft/register'
+    const url = 'http://localhost:3000/nft/register'
     const apiKey = process.env.NEXT_PUBLIC_API_KEY ?? ''
 
     const data = {
@@ -101,7 +101,7 @@ export default function Register() {
       redeemable: redeemable,
       status: status,
       resaleRights: resaleRights,
-      creatorName: 'Julien',
+      creatorName: creatorName,
       info: info,
     }
 
@@ -225,6 +225,7 @@ export default function Register() {
           <FormLabel>Info</FormLabel>
           <Input value={info} onChange={(e) => setInfo(e.target.value)} placeholder={info} />
           <FormHelperText>Information concernant l&apos;enregistrement.</FormHelperText>
+          <br />
 
           {/* <FormLabel>Description</FormLabel>
           <Textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="" />
@@ -237,6 +238,7 @@ export default function Register() {
 
           <FormLabel>Nom de l&apos;auteur</FormLabel>
           <Input value={creatorName} onChange={(e) => setCreatorName(e.target.value)} placeholder={creatorName} />
+          <br />
           {/* <FormHelperText>Nom </FormHelperText> 
           <br />
           <br />

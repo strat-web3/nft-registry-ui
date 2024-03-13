@@ -40,14 +40,14 @@ export default function Update() {
   const [network, setNetwork] = useState<number>(11155111)
   const [recipient, setRecipient] = useState<string>('0xd63ed6E274bedb34D9666B8f62ed32a73C43DD9e')
   const [sourceFileHash, setSourceFileHash] = useState<string>(
-    '78eb762d5c87085342b2963f7de2eefa350ed06af3dc691f1000785be7d9bc105f5ff303a608c23f5e2920c6cc7d656b'
+    'df6bdeba22f11085f61f0f4118716414fac0149bec898678e5d39f4ea146a39b144901df24d4ca66d4cd63ef3efe99e1'
   )
-  // const [description, setDescription] = useState('This is a description.')
-  // const [creatorAddress, setCreatorAddress] = useState<string>('0xd63ed6E274bedb34D9666B8f62ed32a73C43DD9e')
-  // const [creatorName, setCreatorName] = useState<string>('Julien')
-  // const [imageUrl, setImageUrl] = useState<string>(
-  //   'https://bafybeigpo5rtggp5nnzw4bcojdcaj6bvqgoe3zm42azlwnfvn5qyvwmpna.ipfs.w3s.link/Screenshot%202024-01-29%20at%2019.36.24.png'
-  // )
+  const [description, setDescription] = useState('This is a description.')
+  const [creatorAddress, setCreatorAddress] = useState<string>('0xd63ed6E274bedb34D9666B8f62ed32a73C43DD9e')
+  const [creatorName, setCreatorName] = useState<string>('Julien')
+  const [imageUrl, setImageUrl] = useState<string>(
+    'https://bafybeigpo5rtggp5nnzw4bcojdcaj6bvqgoe3zm42azlwnfvn5qyvwmpna.ipfs.w3s.link/Screenshot%202024-01-29%20at%2019.36.24.png'
+  )
   const [resaleRights, setResaleRights] = useState<number>(400)
   const [symbol, setSymbol] = useState<string>('MYNFT')
   const [redeemable, setRedeemable] = useState<boolean>(false)
@@ -91,30 +91,31 @@ export default function Update() {
     console.log('start request')
     setIsLoading(true)
 
-    const url = 'http://poc-nft-pg.public.rd.nic.fr:8080/nft/update'
+    const url = 'http://localhost:3000/nft/update'
     const apiKey = process.env.NEXT_PUBLIC_API_KEY ?? ''
 
     const data = {
-      sourceFileHash: 'df6bdeba22f11085f61f0f4118716414fac0149bec898678e5d39f4ea146a39b144901df24d4ca66d4cd63ef3efe99e1',
-      tokenId: 0,
-      assetType: 0,
-      tangible: false,
-      redeemable: false,
-      status: 4,
-      resaleRights: 400,
-      creatorName: '******',
-      info: 'The NFT was lost.',
+      sourceFileHash: sourceFileHash,
+      tokenId: tokenId,
+      assetType: assetType,
+      tangible: tangible,
+      redeemable: redeemable,
+      status: status,
+      resaleRights: resaleRights,
+      creatorName: creatorName,
+      info: info,
     }
-
-    // sourceFileHash*	[...]
-    // tokenId*	[...]
-    // assetType*	[...]
-    // tangible*	[...]
-    // redeemable*	[...]
-    // status*	[...]
-    // resaleRights*	[...]
-    // creatorName*	[...]
-    // info*
+    // const data = {
+    //   sourceFileHash: 'df6bdeba22f11085f61f0f4118716414fac0149bec898678e5d39f4ea146a39b144901df24d4ca66d4cd63ef3efe99e1',
+    //   tokenId: 1,
+    //   assetType: 0,
+    //   tangible: false,
+    //   redeemable: false,
+    //   status: 4,
+    //   resaleRights: 400,
+    //   creatorName: '******',
+    //   info: 'The NFT was lost.',
+    // }
 
     console.log('data:', data)
 

@@ -88,7 +88,7 @@ export default function Create() {
     setIsLoading(true)
 
     console.log('start request')
-    const url = 'http://poc-nft-pg.public.rd.nic.fr:8080/nft/create'
+    const url = 'http://localhost:3000/nft/create'
     const apiKey = process.env.NEXT_PUBLIC_API_KEY ?? ''
 
     const data = {
