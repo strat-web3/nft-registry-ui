@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint --fix",
     "prettier": "prettier './src' --write",
-    "wagmi": "wagmi generate"
+    "wagmi": "wagmi generate",
+    "surge": "next build && next export && surge --project out --domain http://nft-registry.surge.sh"
   },
   "husky": {
     "hooks": {
